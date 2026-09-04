@@ -60,3 +60,4 @@ The goal of this project is to provide students with a simple AI-powered tool th
 **Ikenna Chinagorom Joel**
 
 Machine Learning & AI Student @ihifix
+https://student-performance-predictor-tutor-agent-production.up.railway.app/
