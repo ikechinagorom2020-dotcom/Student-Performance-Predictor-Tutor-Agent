@@ -1,4 +1,4 @@
-# Cell 18: FastAPI Application
+# Cell 36: Updated FastAPI App (adds tutor chat endpoint)
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
@@ -6,9 +6,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
-from app.schemas import StudentInput, PredictionResponse
+from app.schemas import StudentInput, PredictionResponse, TutorChatRequest, TutorChatResponse
 from app.model import predict_score
-from app.agent import generate_study_plan
+from app.agent import generate_study_plan, tutor_chat
 
 app = FastAPI(title="Student Performance Predictor & Tutor Agent")
 
@@ -44,5 +44,14 @@ def predict(student: StudentInput):
             key_factors=key_factors,
             study_plan=study_plan,
         )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/tutor-chat", response_model=TutorChatResponse)
+def chat(request: TutorChatRequest):
+    try:
+        result = tutor_chat(request.session_id, request.message, request.subject)
+        return TutorChatResponse(reply=result["reply"], quiz_stats=result["quiz_stats"])
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

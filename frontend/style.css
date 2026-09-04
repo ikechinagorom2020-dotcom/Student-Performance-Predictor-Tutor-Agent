@@ -355,3 +355,90 @@ input[type="range"] {
 .score-ring { border-color: var(--green); background: var(--green-bg); }
 .score-ring.zone-mid { border-color: var(--gold); background: #FBF3E3; }
 .score-ring.zone-low { border-color: var(--red); background: var(--red-bg); }
+
+/* ---------- Practice quiz panel ---------- */
+.quiz-card {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  text-align: left;
+}
+.quiz-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.quiz-header h2 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0;
+}
+.quiz-stats {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+
+.quiz-log {
+  max-height: 260px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding-right: 4px;
+}
+.quiz-empty-hint {
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+  margin: 0;
+}
+
+.quiz-msg {
+  font-size: 0.87rem;
+  line-height: 1.55;
+  padding: 10px 13px;
+  border-radius: 9px;
+  max-width: 92%;
+}
+.quiz-msg.user {
+  align-self: flex-end;
+  background: var(--ink);
+  color: #fff;
+}
+.quiz-msg.assistant {
+  align-self: flex-start;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  color: var(--ink);
+}
+.quiz-msg strong { color: inherit; }
+.quiz-msg.loading {
+  align-self: flex-start;
+  color: var(--ink-faint);
+  font-style: italic;
+}
+
+.quiz-input-row {
+  display: flex;
+  gap: 8px;
+}
+.quiz-input-row input {
+  flex: 1;
+  padding: 10px 12px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--paper);
+  color: var(--ink);
+  outline: none;
+}
+.quiz-input-row input:focus { border-color: var(--ink); }
+.btn-small { padding: 10px 18px; font-size: 0.85rem; margin-left: 0; }

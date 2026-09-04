@@ -34,7 +34,6 @@
   prevBtn.addEventListener("click", () => showTab(Math.max(0, currentTabIndex - 1)));
   nextBtn.addEventListener("click", () => showTab(Math.min(TAB_ORDER.length - 1, currentTabIndex + 1)));
 
-  // Toggle (yes/no) controls
   document.querySelectorAll(".toggle").forEach((toggle) => {
     const opts = toggle.querySelectorAll(".toggle-opt");
     opts.forEach((opt) => {
@@ -51,7 +50,6 @@
     return active ? active.dataset.value : "no";
   }
 
-  // Live slider value display
   document.querySelectorAll('input[type="range"]').forEach((slider) => {
     const out = document.getElementById(`${slider.id}-val`);
     if (out) {
@@ -59,7 +57,6 @@
     }
   });
 
-  // Results panel state management
   const resultsEmpty = document.getElementById("results-empty");
   const resultsLoading = document.getElementById("results-loading");
   const resultsContent = document.getElementById("results-content");
@@ -81,7 +78,7 @@
     return escaped.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
   }
 
-    function scoreZoneInfo(score) {
+  function scoreZoneInfo(score) {
     if (score < 10) return { className: "zone-low", label: "Needs attention" };
     if (score < 13) return { className: "zone-mid", label: "Room to grow" };
     return { className: "zone-high", label: "On track" };
@@ -110,6 +107,74 @@
       loadingInterval = null;
     }
   }
+
+  // ---------------- Practice quiz panel ----------------
+  const quizForm = document.getElementById("quiz-form");
+  const quizInput = document.getElementById("quiz-input");
+  const quizLog = document.getElementById("quiz-log");
+  const quizStatsBadge = document.getElementById("quiz-stats-badge");
+  const quizSendBtn = document.getElementById("quiz-send-btn");
+
+  function getSessionId() {
+    let id = localStorage.getItem("tutor_session_id");
+    if (!id) {
+      id = crypto.randomUUID();
+      localStorage.setItem("tutor_session_id", id);
+    }
+    return id;
+  }
+
+  function appendQuizMessage(role, text) {
+    const emptyHint = quizLog.querySelector(".quiz-empty-hint");
+    if (emptyHint) emptyHint.remove();
+
+    const bubble = document.createElement("div");
+    bubble.className = `quiz-msg ${role}`;
+    bubble.innerHTML = formatPlanText(text);
+    quizLog.appendChild(bubble);
+    quizLog.scrollTop = quizLog.scrollHeight;
+    return bubble;
+  }
+
+  quizForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const message = quizInput.value.trim();
+    if (!message) return;
+
+    appendQuizMessage("user", message);
+    quizInput.value = "";
+    quizSendBtn.disabled = true;
+
+    const loadingBubble = appendQuizMessage("assistant loading", "Thinking…");
+
+    try {
+      const res = await fetch("/api/tutor-chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          session_id: getSessionId(),
+          message: message,
+          subject: document.getElementById("subject").value,
+        }),
+      });
+
+      if (!res.ok) {
+        const errBody = await res.json().catch(() => ({}));
+        throw new Error(errBody.detail || `Request failed (${res.status})`);
+      }
+
+      const data = await res.json();
+      loadingBubble.remove();
+      appendQuizMessage("assistant", data.reply);
+      quizStatsBadge.textContent = `${data.quiz_stats.correct} / ${data.quiz_stats.attempted} correct`;
+    } catch (err) {
+      loadingBubble.remove();
+      appendQuizMessage("assistant", `Sorry, something went wrong: ${err.message}`);
+    } finally {
+      quizSendBtn.disabled = false;
+      quizInput.focus();
+    }
+  });
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -197,6 +262,11 @@
       const out = document.getElementById(`${slider.id}-val`);
       if (out) out.textContent = slider.value;
     });
+
+    localStorage.removeItem("tutor_session_id");
+    quizLog.innerHTML = '<p class="quiz-empty-hint">Ask to be quizzed on your subject, answer questions, and track your score here.</p>';
+    quizStatsBadge.textContent = "0 / 0 correct";
+
     setResultsState(resultsEmpty);
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
