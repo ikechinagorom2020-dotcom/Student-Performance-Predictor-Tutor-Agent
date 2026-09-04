@@ -73,6 +73,8 @@ def debug_groq():
 def predict(student: StudentInput):
     try:
         student_dict = student.dict()
+
+        print("DEBUG STUDENT INPUT:", student_dict)
         predicted_score, key_factors = predict_score(student_dict)
         study_plan = generate_study_plan(predicted_score, key_factors)
         return PredictionResponse(
