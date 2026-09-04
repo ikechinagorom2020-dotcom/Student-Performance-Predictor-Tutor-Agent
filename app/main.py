@@ -33,48 +33,10 @@ def health():
     return {"status": "ok"}
 
 
-@app.get("/debug/groq")
-def debug_groq():
-    import os
-    from groq import Groq
-
-    key = os.getenv("GROQ_API_KEY")
-
-    if not key:
-        return {
-            "key_present": False,
-            "key_length": 0,
-            "starts_with_gsk": False,
-            "groq_auth": "not tested"
-        }
-
-    try:
-        client = Groq(api_key=key)
-        client.models.list()
-
-        return {
-            "key_present": True,
-            "key_length": len(key),
-            "starts_with_gsk": key.startswith("gsk_"),
-            "groq_auth": "SUCCESS"
-        }
-
-    except Exception as e:
-        return {
-            "key_present": True,
-            "key_length": len(key),
-            "starts_with_gsk": key.startswith("gsk_"),
-            "groq_auth": "FAILED",
-            "error": str(e)
-        }
-
-
 @app.post("/api/predict", response_model=PredictionResponse)
 def predict(student: StudentInput):
     try:
         student_dict = student.dict()
-
-        print("DEBUG STUDENT INPUT:", student_dict)
         predicted_score, key_factors = predict_score(student_dict)
         study_plan = generate_study_plan(predicted_score, key_factors)
         return PredictionResponse(
