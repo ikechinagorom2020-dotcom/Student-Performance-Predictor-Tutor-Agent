@@ -79,7 +79,7 @@ Write the personalized study plan now. Remember: under 160 words total, and alwa
             {"role": "user", "content": user_prompt},
         ],
         temperature=0.6,
-        max_tokens=700,
+        max_tokens=1000,
     )
 
     content = response.choices[0].message.content
