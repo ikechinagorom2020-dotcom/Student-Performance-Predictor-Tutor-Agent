@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Study Forecast — Student Performance Predictor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <h1>Study Forecast</h1>
+    <p class="subtitle">Answer a few questions about your habits and background — get a projected grade and a study plan built around it.</p>
+  </div>
+</header>
+
+<main class="layout">
+
+  <section class="form-panel" aria-label="Student information form">
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-tab="about" role="tab" aria-selected="true">About You</button>
+      <button class="tab" data-tab="family" role="tab" aria-selected="false">Family &amp; Support</button>
+      <button class="tab" data-tab="school" role="tab" aria-selected="false">School Life</button>
+      <button class="tab" data-tab="lifestyle" role="tab" aria-selected="false">Lifestyle</button>
+    </nav>
+
+    <form id="predict-form">
+
+      <fieldset class="tab-panel active" data-panel="about">
+        <div class="rule"><span>About You</span></div>
+
+        <div class="field-grid">
+          <div class="field">
+            <label for="school">School</label>
+            <select id="school" name="school" required>
+              <option value="GP">Gabriel Pereira</option>
+              <option value="MS">Mousinho da Silveira</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="sex">Sex</label>
+            <select id="sex" name="sex" required>
+              <option value="F">Female</option>
+              <option value="M">Male</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="age">Age</label>
+            <input type="number" id="age" name="age" min="15" max="22" value="17" required />
+          </div>
+
+          <div class="field">
+            <label for="address">Home address</label>
+            <select id="address" name="address" required>
+              <option value="U">Urban</option>
+              <option value="R">Rural</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="famsize">Family size</label>
+            <select id="famsize" name="famsize" required>
+              <option value="LE3">3 or fewer</option>
+              <option value="GT3">More than 3</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="subject">Subject you're forecasting</label>
+            <select id="subject" name="subject" required>
+              <option value="math">Math</option>
+              <option value="portuguese">Portuguese</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="tab-panel" data-panel="family">
+        <div class="rule"><span>Family &amp; Support</span></div>
+
+        <div class="field-grid">
+          <div class="field">
+            <label for="Pstatus">Parents' cohabitation</label>
+            <select id="Pstatus" name="Pstatus" required>
+              <option value="T">Living together</option>
+              <option value="A">Living apart</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="guardian">Primary guardian</label>
+            <select id="guardian" name="guardian" required>
+              <option value="mother">Mother</option>
+              <option value="father">Father</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="Medu">Mother's education</label>
+            <select id="Medu" name="Medu" required>
+              <option value="0">None</option>
+              <option value="1">Primary (4th grade)</option>
+              <option value="2">5th–9th grade</option>
+              <option value="3">Secondary</option>
+              <option value="4" selected>Higher education</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="Fedu">Father's education</label>
+            <select id="Fedu" name="Fedu" required>
+              <option value="0">None</option>
+              <option value="1">Primary (4th grade)</option>
+              <option value="2">5th–9th grade</option>
+              <option value="3">Secondary</option>
+              <option value="4" selected>Higher education</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="Mjob">Mother's job</label>
+            <select id="Mjob" name="Mjob" required>
+              <option value="teacher">Teacher</option>
+              <option value="health">Healthcare</option>
+              <option value="services">Civil services</option>
+              <option value="at_home">At home</option>
+              <option value="other" selected>Other</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="Fjob">Father's job</label>
+            <select id="Fjob" name="Fjob" required>
+              <option value="teacher">Teacher</option>
+              <option value="health">Healthcare</option>
+              <option value="services">Civil services</option>
+              <option value="at_home">At home</option>
+              <option value="other" selected>Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field-grid">
+          <div class="field toggle-field">
+            <span class="toggle-label">Extra school support</span>
+            <div class="toggle" data-name="schoolsup">
+              <button type="button" class="toggle-opt active" data-value="yes">Yes</button>
+              <button type="button" class="toggle-opt" data-value="no">No</button>
+            </div>
+          </div>
+
+          <div class="field toggle-field">
+            <span class="toggle-label">Family educational support</span>
+            <div class="toggle" data-name="famsup">
+              <button type="button" class="toggle-opt active" data-value="yes">Yes</button>
+              <button type="button" class="toggle-opt" data-value="no">No</button>
+            </div>
+          </div>
+
+          <div class="field toggle-field">
+            <span class="toggle-label">Paid extra classes</span>
+            <div class="toggle" data-name="paid">
+              <button type="button" class="toggle-opt" data-value="yes">Yes</button>
+              <button type="button" class="toggle-opt active" data-value="no">No</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="field slider-field">
+          <label for="famrel">Quality of family relationships</label>
+          <input type="range" id="famrel" name="famrel" min="1" max="5" value="4" />
+          <div class="slider-scale"><span>Very poor</span><span id="famrel-val">4</span><span>Excellent</span></div>
+        </div>
+      </fieldset>
+
+      <fieldset class="tab-panel" data-panel="school">
+        <div class="rule"><span>School Life</span></div>
+
+        <div class="field-grid">
+          <div class="field">
+            <label for="reason">Reason for choosing school</label>
+            <select id="reason" name="reason" required>
+              <option value="home">Close to home</option>
+              <option value="reputation">School reputation</option>
+              <option value="course" selected>Course preference</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="traveltime">Travel time to school</label>
+            <select id="traveltime" name="traveltime" required>
+              <option value="1">Under 15 min</option>
+              <option value="2">15–30 min</option>
+              <option value="3">30 min – 1 hr</option>
+              <option value="4">Over 1 hr</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="studytime">Weekly study time</label>
+            <select id="studytime" name="studytime" required>
+              <option value="1">Under 2 hrs</option>
+              <option value="2">2–5 hrs</option>
+              <option value="3">5–10 hrs</option>
+              <option value="4">Over 10 hrs</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="failures">Past class failures</label>
+            <select id="failures" name="failures" required>
+              <option value="0">None</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3 or more</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="absences">Absences this term</label>
+            <input type="number" id="absences" name="absences" min="0" max="100" value="4" required />
+          </div>
+        </div>
+
+        <div class="field-grid">
+          <div class="field toggle-field">
+            <span class="toggle-label">Extracurricular activities</span>
+            <div class="toggle" data-name="activities">
+              <button type="button" class="toggle-opt active" data-value="yes">Yes</button>
+              <button type="button" class="toggle-opt" data-value="no">No</button>
+            </div>
+          </div>
+
+          <div class="field toggle-field">
+            <span class="toggle-label">Attended nursery school</span>
+            <div class="toggle" data-name="nursery">
+              <button type="button" class="toggle-opt active" data-value="yes">Yes</button>
+              <button type="button" class="toggle-opt" data-value="no">No</button>
+            </div>
+          </div>
+
+          <div class="field toggle-field">
+            <span class="toggle-label">Wants higher education</span>
+            <div class="toggle" data-name="higher">
+              <button type="button" class="toggle-opt active" data-value="yes">Yes</button>
+              <button type="button" class="toggle-opt" data-value="no">No</button>
+            </div>
+          </div>
+
+          <div class="field toggle-field">
+            <span class="toggle-label">Internet access at home</span>
+            <div class="toggle" data-name="internet">
+              <button type="button" class="toggle-opt active" data-value="yes">Yes</button>
+              <button type="button" class="toggle-opt" data-value="no">No</button>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="tab-panel" data-panel="lifestyle">
+        <div class="rule"><span>Lifestyle</span></div>
+
+        <div class="field-grid">
+          <div class="field toggle-field">
+            <span class="toggle-label">In a romantic relationship</span>
+            <div class="toggle" data-name="romantic">
+              <button type="button" class="toggle-opt" data-value="yes">Yes</button>
+              <button type="button" class="toggle-opt active" data-value="no">No</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="field slider-field">
+          <label for="freetime">Free time after school</label>
+          <input type="range" id="freetime" name="freetime" min="1" max="5" value="3" />
+          <div class="slider-scale"><span>Very low</span><span id="freetime-val">3</span><span>Very high</span></div>
+        </div>
+
+        <div class="field slider-field">
+          <label for="goout">Going out with friends</label>
+          <input type="range" id="goout" name="goout" min="1" max="5" value="3" />
+          <div class="slider-scale"><span>Rarely</span><span id="goout-val">3</span><span>Very often</span></div>
+        </div>
+
+        <div class="field slider-field">
+          <label for="Dalc">Weekday alcohol consumption</label>
+          <input type="range" id="Dalc" name="Dalc" min="1" max="5" value="1" />
+          <div class="slider-scale"><span>Very low</span><span id="Dalc-val">1</span><span>Very high</span></div>
+        </div>
+
+        <div class="field slider-field">
+          <label for="Walc">Weekend alcohol consumption</label>
+          <input type="range" id="Walc" name="Walc" min="1" max="5" value="1" />
+          <div class="slider-scale"><span>Very low</span><span id="Walc-val">1</span><span>Very high</span></div>
+        </div>
+
+        <div class="field slider-field">
+          <label for="health">Current health status</label>
+          <input type="range" id="health" name="health" min="1" max="5" value="4" />
+          <div class="slider-scale"><span>Very poor</span><span id="health-val">4</span><span>Very good</span></div>
+        </div>
+      </fieldset>
+
+      <div class="form-nav">
+        <button type="button" id="prev-btn" class="btn btn-ghost" disabled>Back</button>
+        <button type="button" id="next-btn" class="btn btn-primary">Next</button>
+        <button type="submit" id="submit-btn" class="btn btn-primary hidden">Get my forecast</button>
+      </div>
+    </form>
+  </section>
+
+  <aside class="results-panel" aria-label="Prediction results">
+    <div class="results-card" id="results-empty">
+      <p class="results-hint">Fill in the form and submit to see your projected grade and a personalized study plan here.</p>
+    </div>
+
+    <div class="results-card hidden" id="results-loading">
+      <div class="spinner" aria-hidden="true"></div>
+      <p id="loading-message">Running the model…</p>
+    </div>
+
+    <div class="results-card hidden" id="results-content">
+      <div class="score-stamp">
+        <div class="score-ring" id="score-ring">
+          <span class="score-number" id="score-number">0</span>
+          <span class="score-max">/ 20</span>
+        </div>
+        <p class="score-label">Projected final grade</p>
+        <p class="score-zone" id="score-zone"></p>
+      </div>
+
+      <div class="plan-card">
+        <h2>Your Study Plan</h2>
+        <div id="plan-text" class="plan-text"></div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-header">
+          <h2>Practice &amp; Improve</h2>
+          <span class="quiz-stats" id="quiz-stats-badge">0 / 0 correct</span>
+        </div>
+
+        <div class="quiz-log" id="quiz-log">
+          <p class="quiz-empty-hint">Ask to be quizzed on your subject, answer questions, and track your score here.</p>
+        </div>
+
+        <form id="quiz-form" class="quiz-input-row">
+          <input type="text" id="quiz-input" placeholder="Try: “Quiz me on math”" autocomplete="off" />
+          <button type="submit" class="btn btn-primary btn-small" id="quiz-send-btn">Send</button>
+        </form>
+      </div>
+
+      <button type="button" id="reset-btn" class="btn btn-ghost btn-full">Start over</button>
+    </div>
+
+    <div class="results-card hidden" id="results-error">
+      <p class="error-title">Something went wrong</p>
+      <p id="error-message" class="error-message"></p>
+      <button type="button" id="retry-btn" class="btn btn-ghost">Try again</button>
+    </div>
+  </aside>
+
+</main>
+
+<footer class="site-footer">
+  <p>Predictions are estimates based on study habits and background data, not a guarantee — use them as a planning tool, not a verdict.</p>
+</footer>
+
+<script src="/static/script.js"></script>
+</body>
+</html>
