@@ -1,4 +1,4 @@
-# Cell 15: Pydantic Schemas (request/response validation)
+
 from pydantic import BaseModel, Field
 from typing import Literal, Dict, Any
 
@@ -41,3 +41,14 @@ class PredictionResponse(BaseModel):
     predicted_score: float
     key_factors: Dict[str, Any]
     study_plan: str
+
+
+class TutorChatRequest(BaseModel):
+    session_id: str
+    message: str
+    subject: Literal["math", "portuguese"] = "math"
+
+
+class TutorChatResponse(BaseModel):
+    reply: str
+    quiz_stats: Dict[str, int]
